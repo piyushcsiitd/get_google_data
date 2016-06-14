@@ -1,4 +1,5 @@
-import urllib.request
+import requests
+#import urllib.request
 import datetime as dt
 import pandas as pd
 
@@ -7,7 +8,10 @@ def get_google_data(symbol, period, window, exch = 'NYSE'):
                 + str(period) + '&p=' + str(window)
                 + 'd&f=d,o,h,l,c,v&df=cpct&x=' + exch.upper() 
                 + '&q=' + symbol.upper())
-    response = urllib.request.urlopen(url_root)
+#    response = urllib.request.urlopen(url_root)
+    print url_root
+    response=requests.get( url_root )
+    print response
     data=response.read().decode().split('\n')       #decode() required for Python 3
     data = [data[i].split(',') for i in range(len(data)-1)]
     header = data[0:7]
@@ -30,3 +34,5 @@ def get_google_data(symbol, period, window, exch = 'NYSE'):
         df[column]=pd.to_numeric(df[column])
     
     return df
+
+print get_google_data( "NIFTY", 100, 100, exch = "NSE" )
